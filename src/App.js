@@ -17,16 +17,25 @@ function App() {
   const [errorMessage, setErrorMessage] = useState("");
 
   async function initializeProviderAndSigner() {
-    if (window.ethereum) {
-      console.log("Metamask detected")
-      const metamaskProvider = new ethers.providers.Web3Provider(
-        window.ethereum
-      );
-      setProvider(metamaskProvider);
-      setSigner(metamaskProvider.getSigner());
-    } else {
-      console.log("Metamask not detected");
+    try {
+      if (window.ethereum) {
+        console.log("Metamask detected")
+        const metamaskProvider = new ethers.providers.Web3Provider(
+          window.ethereum
+        );
+  
+    
+        const accounts = await metamaskProvider.send("eth_requestAccounts", []);
+        //   console.log(accounts)
+        setProvider(metamaskProvider);
+        setSigner(metamaskProvider.getSigner());
+      } else {
+        console.log("Metamask not detected");
+      }
+    } catch (error) {
+      console.log(error)
     }
+
   }
 
   useEffect(() => {
@@ -61,7 +70,7 @@ function App() {
       );
       await tx.wait();
     } catch (error) {
-      setErrorMessage("Error minting tokens" + error.error.data.message);
+      setErrorMessage("Error minting tokens" + error);
     }
   };
 
@@ -72,25 +81,27 @@ function App() {
       console.log(tx);
     } catch (error) {
       console.log(error.error.data.message);
-      setErrorMessage("Error whitelisting address" + error.error.data.message);
+      setErrorMessage("Error whitelisting address" + error);
     }
   };
   const blackListAddress = async () => {
     try {
+      
       const tx = await tokenContract.blacklist(recipientAddress);
       await tx.wait();
     } catch (error) {
-      setErrorMessage("Error blacklisting address" + error.error.data.message);
+      setErrorMessage("Error blacklisting address" + error);
     }
   };
 
   const getBalance = async () => {
     try {
+      console.log(recipientAddress);
       const balance = await tokenContract.balanceOf(recipientAddress);
       setBalance(ethers.utils.formatEther(balance));
     } catch (error) {
-      console.log(error.error)
-      setErrorMessage("Error getting balance" + error.error.data.message);
+      console.log(error)
+      setErrorMessage("Error getting balance" + error);
     }
   };
 
