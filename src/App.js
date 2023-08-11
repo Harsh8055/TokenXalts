@@ -16,18 +16,20 @@ function App() {
   const [balance, setBalance] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  useEffect(() => {
-    async function initializeProviderAndSigner() {
-      if (window.ethereum) {
-        const metamaskProvider = new ethers.providers.Web3Provider(
-          window.ethereum
-        );
-        setProvider(metamaskProvider);
-        setSigner(metamaskProvider.getSigner());
-      } else {
-        console.log("Metamask not detected");
-      }
+  async function initializeProviderAndSigner() {
+    if (window.ethereum) {
+      const metamaskProvider = new ethers.providers.Web3Provider(
+        window.ethereum
+      );
+      setProvider(metamaskProvider);
+      setSigner(metamaskProvider.getSigner());
+    } else {
+      console.log("Metamask not detected");
     }
+  }
+  
+  useEffect(() => {
+ 
 
     initializeProviderAndSigner();
   }, []);
@@ -107,6 +109,9 @@ function App() {
     <div className="App">
       <header className="App-header">
         <h1>ERC20 Token Interaction</h1>
+        <div>
+          <button onClick={initializeProviderAndSigner}>Connect Wallet</button>
+        </div>
         <div>
           <label>Recipient Address:</label>
           <input
