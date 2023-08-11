@@ -18,6 +18,7 @@ function App() {
 
   async function initializeProviderAndSigner() {
     if (window.ethereum) {
+      console.log("Metamask detected")
       const metamaskProvider = new ethers.providers.Web3Provider(
         window.ethereum
       );
@@ -27,7 +28,7 @@ function App() {
       console.log("Metamask not detected");
     }
   }
-  
+
   useEffect(() => {
  
 
