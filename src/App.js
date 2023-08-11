@@ -86,6 +86,7 @@ function App() {
       const balance = await tokenContract.balanceOf(recipientAddress);
       setBalance(ethers.utils.formatEther(balance));
     } catch (error) {
+      console.log(error.error)
       setErrorMessage("Error getting balance" + error.error.data.message);
     }
   };
